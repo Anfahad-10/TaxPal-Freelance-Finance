@@ -3,7 +3,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Styles from your HTML */
+
+
 :root {
   --bg-deep: #0B1120;
   --accent-glow: radial-gradient(circle at center, rgba(56, 189, 248, 0.08) 0%, rgba(99, 102, 241, 0.05) 35%, rgba(15, 23, 42, 0) 70%);
