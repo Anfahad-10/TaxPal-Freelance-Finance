@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-const SignupPage = () => {
+function SignUp() {
+  const [signupInfo, setSignupInfo] = useState({ name: '', email: '', password: '' });
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSignupInfo({ ...signupInfo, [name]: value });
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/register', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signupInfo)
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Signup Successful!");
+        navigate('/login');
+      } else {
+        alert(result.message || "Signup Failed");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-[#0B1120]">
       <div className="bg-grain"></div>
       <div className="glow-orb"></div>
-      
+
       <div className="relative z-10 w-full max-w-[440px]">
         <div className="glass-card rounded-[20px] p-8 sm:p-10 w-full">
           <div className="text-center mb-10">
@@ -23,15 +53,15 @@ const SignupPage = () => {
           <form className="space-y-5">
             <div className="space-y-1.5">
               <label className="text-[13px] font-medium text-slate-400 ml-0.5" htmlFor="fullname">Full Name</label>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="fullname" placeholder="John Doe" required type="text"/>
+              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="fullname" placeholder="John Doe" required type="text" />
             </div>
             <div className="space-y-1.5">
               <label className="text-[13px] font-medium text-slate-400 ml-0.5" htmlFor="email">Email address</label>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="email" placeholder="name@company.com" required type="email"/>
+              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="email" placeholder="name@company.com" required type="email" />
             </div>
             <div className="space-y-1.5">
               <label className="text-[13px] font-medium text-slate-400 ml-0.5" htmlFor="password">Password</label>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="password" placeholder="Min. 8 characters" required type="password"/>
+              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="password" placeholder="Min. 8 characters" required type="password" />
             </div>
             <div className="pt-2">
               <button className="w-full shimmer-btn font-bold py-3.5 rounded-lg text-[14px] text-slate-900 shadow-lg tracking-tight hover:shadow-xl" type="submit">
@@ -51,7 +81,7 @@ const SignupPage = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <button className="flex items-center justify-center gap-2.5 bg-slate-800/40 hover:bg-slate-700/50 text-slate-200 border border-slate-700/50 hover:border-slate-600/50 rounded-lg py-2.5 transition-all duration-200 text-[13px] font-medium group" type="button">
-              <img alt="Google logo" className="w-4 h-4 opacity-90 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ0_QJ7Gv1XR23-8CUJm0dey6K9LBWWUix3M_zqYeSHo0wgEpU_-xeG1dTgN15yjjD5fz-1x6Up-nVHJtcMdKYbUKnFkWTFwuB_TORy5il4hxjJt8aDoTV4fzh3k5KE4MvvYvC1cK9qf8JbiwHcUIdNnfDkY3WKJIeu-MgkUUdF3HDuuy5ZVfgDqkhAJ8YTNR8rmTON-BtnS0CF76_7iWO10AIZp4Av-SBe4l_3iNTjO8NKgPDt3Ze7_nr5IRxiYr0vviyKUsQOg4"/>
+              <img alt="Google logo" className="w-4 h-4 opacity-90 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ0_QJ7Gv1XR23-8CUJm0dey6K9LBWWUix3M_zqYeSHo0wgEpU_-xeG1dTgN15yjjD5fz-1x6Up-nVHJtcMdKYbUKnFkWTFwuB_TORy5il4hxjJt8aDoTV4fzh3k5KE4MvvYvC1cK9qf8JbiwHcUIdNnfDkY3WKJIeu-MgkUUdF3HDuuy5ZVfgDqkhAJ8YTNR8rmTON-BtnS0CF76_7iWO10AIZp4Av-SBe4l_3iNTjO8NKgPDt3Ze7_nr5IRxiYr0vviyKUsQOg4" />
               <span>Google</span>
             </button>
             <button className="flex items-center justify-center gap-2.5 bg-slate-800/40 hover:bg-slate-700/50 text-slate-200 border border-slate-700/50 hover:border-slate-600/50 rounded-lg py-2.5 transition-all duration-200 text-[13px] font-medium group" type="button">
@@ -62,19 +92,19 @@ const SignupPage = () => {
 
           <div className="mt-8 text-center">
             <p className="text-slate-500 text-[13px]">
-              Already have an account? 
+              Already have an account?
               <a href="#" className="text-blue-400 font-medium hover:text-blue-300 transition-colors ml-1">Sign in</a>
             </p>
           </div>
         </div>
-        
+
         <div className="flex justify-center gap-6 mt-8 text-[12px] font-medium text-slate-600">
-            <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>
+          <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default SignupPage;
+export default SignUp;

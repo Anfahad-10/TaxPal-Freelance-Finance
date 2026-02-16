@@ -1,8 +1,41 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Login = () => {
-  return (
+function Login() {
+    const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setLoginInfo({ ...loginInfo, [name]: value });
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/login', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginInfo)
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                // PHASE 10: Store token and user data
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('loggedInUser', result.user.name);
+                
+                alert("Login Success!");
+                navigate('/home');
+            } else {
+                alert(result.message || "Login Failed");
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-[#0F111A]">
       <div className="bg-grain"></div>
       <div className="glow-orb"></div>
@@ -68,6 +101,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken")
 async function userRegisterController(req,res){
     const { email, password,name } = req.body
 
-    const isExists = await userModel.findOne({
+    const isExist = await userModel.findOne({
         email: email
     })
 
@@ -56,7 +56,7 @@ async function userLoginController(req,res){
         })
     }
 
-    const isPasswordValid = await user.compare(password)
+    const isPasswordValid = await user.comparePassword(password)
 
     if (!isPasswordValid) {
         return res.status(401).json({
