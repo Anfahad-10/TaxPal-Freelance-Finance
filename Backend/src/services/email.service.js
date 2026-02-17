@@ -1,215 +1,166 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        type: 'OAuth2',
-        user: process.env.EMAIL_USER,
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        refreshToken: process.env.REFRESH_TOKEN,
-    },
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.EMAIL_USER,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    refreshToken: process.env.REFRESH_TOKEN,
+  },
 });
 
 // Verify the connection configuration
 transporter.verify((error, success) => {
-    if (error) {
-        console.error('Error connecting to email server:', error);
-    } else {
-        console.log('Email server is ready to send messages');
-    }
+  if (error) {
+    console.error('Error connecting to email server:', error);
+  } else {
+    console.log('Email server is ready to send messages');
+  }
 });
 
 // Function to send email
 const sendEmail = async (to, subject, text, html) => {
-    try {
-        const info = await transporter.sendMail({
-            from: `"Taxpal Finance" <${process.env.EMAIL_USER}>`, // sender address
-            to, // list of receivers
-            subject, // Subject line
-            text, // plain text body
-            html, // html body
-        });
+  try {
+    const info = await transporter.sendMail({
+      from: `"Taxpal Finance" <${process.env.EMAIL_USER}>`, // sender address
+      to, // list of receivers
+      subject, // Subject line
+      text, // plain text body
+      html, // html body
+    });
 
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    } catch (error) {
-        console.error('Error sending email:', error);
-    }
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
 };
 
 
 async function sendRegistrationEmail(userEmail, name) {
-    const subject = "Verified: Your Taxpal Finance account is Active 💎";
-    const text = `Hello ${name}, Welcome to Taxpal Finance. Your account is ready. \n Your journey to smarter wealth management starts here.`;
-    const html = `
-            <!DOCTYPE html>
-    <html>
+  const subject = "Welcome to Taxpal Finance – Your account is active 💎";
+  const text = `Hello ${name},\n\nWelcome to Taxpal Finance! Your account is now active. Start managing your wealth and optimizing your taxes today.\n\nGo to Dashboard: https://taxpal-finance.com/dashboard`;
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
-        /* Base Styles */
-        body { 
-          margin: 0; 
-          padding: 0; 
-          background: #0f172a; /* Deep Navy Background */
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+        /* Modern Reset */
+        body { margin: 0; padding: 0; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+        table { border-spacing: 0; border-collapse: collapse; width: 100%; }
+        td { padding: 0; }
 
-        /* Full Background Wrapper */
-        .wrapper {
-          width: 100%;
-          background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-          padding: 40px 0;
-        }
+        /* Layout */
+        .wrapper { width: 100%; table-layout: fixed; background-color: #ffffff; }
+        .container { max-width: 600px; margin: 0 auto; }
 
-        /* The Main Glass-Style Card */
-        .card {
-          max-width: 540px;
-          margin: 0 auto;
-          background: #ffffff;
-          border-radius: 24px;
-          overflow: hidden;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.3); /* Deep shadow for premium feel */
-        }
-
-        /* Top Accent Header */
-        .hero {
-          background: #10b981; /* Finance Emerald */
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          padding: 40px;
-          text-align: center;
-        }
-
-        .hero h1 {
-          color: #ffffff;
-          margin: 0;
-          font-size: 28px;
-          font-weight: 800;
-          letter-spacing: -0.5px;
-        }
-
-        /* Body Content */
-        .content {
-          padding: 40px;
-          background-color: #ffffff;
-        }
-
-        .greeting {
-          font-size: 22px;
-          font-weight: 700;
-          color: #1e293b;
-          margin-bottom: 12px;
-        }
-
-        .text {
-          font-size: 16px;
-          color: #64748b;
-          line-height: 1.6;
-          margin-bottom: 30px;
-        }
-
-        /* Feature Row (Finance Vibe) */
-        .feature-box {
-          background: #f8fafc;
-          border-radius: 12px;
-          padding: 16px;
-          margin-bottom: 12px;
-          border: 1px solid #e2e8f0;
-        }
-
-        .feature-title {
-          font-weight: 700;
-          color: #0f172a;
-          font-size: 14px;
-          display: flex;
-          align-items: center;
-        }
-
-        /* Premium Button */
-        .cta-button {
+        /* Content Sections */
+        .header { padding: 48px 20px 20px 20px; text-align: left; }
+        .main-content { padding: 40px 20px; text-align: center; }
+        
+        /* Typography - Modern Finance Style */
+        .title { color: #121212; font-size: 40px; font-weight: 800; line-height: 1.1; margin: 0 0 24px 0; letter-spacing: -1.5px; }
+        .body-copy { color: #535353; font-size: 17px; line-height: 1.6; margin: 0 auto 32px auto; max-width: 480px; }
+        
+        /* The "Pill" Button */
+        .btn-wrapper { padding: 10px 0 50px 0; }
+        .btn { 
+          background-color: #1DB954; /* Spotify Green / Growth Emerald */
+          color: #ffffff !important; 
+          padding: 18px 42px; 
+          text-decoration: none; 
+          border-radius: 500px; 
+          font-weight: 700; 
+          font-size: 13px; 
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
           display: inline-block;
-          background: #0f172a;
-          color: #ffffff !important;
-          padding: 16px 32px;
-          border-radius: 12px;
-          text-decoration: none;
-          font-weight: 600;
-          font-size: 16px;
-          margin-top: 10px;
-          text-align: center;
-          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(29, 185, 84, 0.25);
         }
 
-        /* Footer Styling */
-        .footer {
-          text-align: center;
-          padding: 30px;
-          color: #94a3b8;
-          font-size: 12px;
-        }
+        /* Footer - Full Width Gray */
+        .footer-outer { background-color: #F8F8F8; padding: 60px 0; border-top: 1px solid #eeeeee; }
+        .footer-inner { max-width: 600px; margin: 0 auto; padding: 0 20px; text-align: left; }
+        .footer-logo { font-size: 22px; font-weight: 800; color: #b3b3b3; margin-bottom: 24px; display: block; }
+        .footer-links { font-size: 12px; color: #a1a1a1; line-height: 1.8; margin-bottom: 20px; }
+        .footer-links a { color: #a1a1a1; text-decoration: none; margin-right: 15px; font-weight: 600; }
+        .footer-links a:hover { text-decoration: underline; }
+        .address { font-size: 11px; color: #b3b3b3; margin-top: 30px; line-height: 1.5; }
 
-        /* Mobile Optimization */
-        @media only screen and (max-width: 600px) {
-          .wrapper { padding: 0; }
-          .card { border-radius: 0; max-width: 100%; }
-          .hero { padding: 30px 20px; }
-          .content { padding: 30px 20px; }
+        /* Mobile Adjustments */
+        @media screen and (max-width: 600px) {
+          .title { font-size: 32px !important; }
+          .header { padding-top: 30px; }
+          .btn { width: 100%; box-sizing: border-box; }
         }
       </style>
     </head>
     <body>
       <div class="wrapper">
-        <table class="card" role="presentation" cellspacing="0" cellpadding="0" align="center">
-          <!-- Premium Hero Section -->
+        <!-- Logo Section -->
+        <table class="container">
           <tr>
-            <td class="hero">
-              <h1>Taxpal Finance</h1>
-              <p style="color: #d1fae5; font-weight: 500; margin-top: 8px;">Institutional Wealth Management</p>
-            </td>
-          </tr>
-
-          <!-- Body Content -->
-          <tr>
-            <td class="content">
-              <div class="greeting">Hello, ${name} 👋</div>
-              <p class="text">
-                Your portfolio is ready for activation. Experience the next generation of tax optimization and wealth tracking.
-              </p>
-
-              <!-- Finance Visual Indicators -->
-              <div class="feature-box">
-                <div class="feature-title">✨ Smart Tax Optimization</div>
-                <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Automated deductions and real-time filing support.</div>
-              </div>
-
-              <div class="feature-box">
-                <div class="feature-title">🛡️ Bank-Level Encryption</div>
-                <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Your data is secured by industry-leading AES-256 protocols.</div>
-              </div>
-
-              <div style="text-align: center; margin-top: 30px;">
-                <a href="https://taxpal-finance.com/dashboard" class="cta-button">Enter Your Dashboard</a>
-              </div>
-            </td>
-          </tr>
-
-          <!-- Simple Footer -->
-          <tr>
-            <td class="footer">
-              <p>© 2025 Taxpal Finance Inc. | All Rights Reserved</p>
-              <p style="margin-top: 8px;">
-                <a href="#" style="color: #94a3b8;">Unsubscribe</a> • <a href="#" style="color: #94a3b8;">Privacy Policy</a>
-              </p>
+            <td class="header">
+              <span style="font-size: 24px; font-weight: 800; color: #1DB954; letter-spacing: -0.5px;">Taxpal.</span>
             </td>
           </tr>
         </table>
+
+        <!-- Main Body -->
+        <table class="container">
+          <tr>
+            <td class="main-content">
+              <h1 class="title">Your financial journey starts now.</h1>
+              
+              <p class="body-copy">
+                Hello ${name}, thanks for joining Taxpal Finance. Your account is fully set up and ready to help you optimize your wealth and simplify your taxes.
+              </p>
+
+              <div class="btn-wrapper">
+                <a href="https://taxpal-finance.com/dashboard" class="btn">Go to My Dashboard</a>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Full Width Footer -->
+        <div class="footer-outer">
+            <div class="footer-inner">
+              <span class="footer-logo">Taxpal</span>
+              
+              <div class="footer-links">
+                <span style="margin-right: 15px; color: #121212; font-weight: 700;">GET THE APP:</span>
+                <a href="#">iPhone</a>
+                <a href="#">iPad</a>
+                <a href="#">Android</a>
+              </div>
+
+              <div style="border-top: 1px solid #e0e0e0; margin: 20px 0;"></div>
+              
+              <div class="footer-links">
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Security</a>
+                <a href="#">Contact Support</a>
+              </div>
+              
+              <p class="address">
+                This email was sent to ${userEmail} because you registered an account with Taxpal Finance.<br><br>
+                Taxpal Finance Inc.<br>
+                255 Financial District, 7th Floor<br>
+                New York, NY 10004, USA
+              </p>
+            </div>
+        </div>
       </div>
     </body>
     </html>
   `;
-    await sendEmail(userEmail, subject, text, html);
+  await sendEmail(userEmail, subject, text, html);
 }
 
 module.exports = { sendRegistrationEmail };
