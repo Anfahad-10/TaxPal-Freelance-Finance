@@ -13,7 +13,7 @@ function SignUp() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/api/auth/register', {
+      const response = await fetch('/api/auth/register', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(signupInfo)
@@ -27,7 +27,8 @@ function SignUp() {
         alert(result.message || "Signup Failed");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Signup Error:", err);
+      alert("Something went wrong. Check the console.");
     }
   };
 
@@ -50,18 +51,42 @@ function SignUp() {
             <p className="text-slate-400 text-[14px] font-normal">Start managing your freelance finances today.</p>
           </div>
 
-          <form className="space-y-5">
+          <form onSubmit={handleSignup} className="space-y-5">
             <div className="space-y-1.5">
               <label className="text-[13px] font-medium text-slate-400 ml-0.5" htmlFor="fullname">Full Name</label>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="fullname" placeholder="John Doe" required type="text" />
+              <input 
+              className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" 
+              id="fullname" 
+              name="name"
+              value={signupInfo.name}
+              onChange={handleChange}
+              placeholder="John Doe" 
+              required 
+              type="text" />
             </div>
             <div className="space-y-1.5">
               <label className="text-[13px] font-medium text-slate-400 ml-0.5" htmlFor="email">Email address</label>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="email" placeholder="name@company.com" required type="email" />
+              <input 
+              className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" 
+              id="email" 
+              name="email"
+              value={signupInfo.email}
+              onChange={handleChange}
+              placeholder="name@company.com" 
+              required 
+              type="email" />
             </div>
             <div className="space-y-1.5">
               <label className="text-[13px] font-medium text-slate-400 ml-0.5" htmlFor="password">Password</label>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" id="password" placeholder="Min. 8 characters" required type="password" />
+              <input 
+              className="w-full px-4 py-3 custom-input rounded-lg text-[14px] placeholder-slate-600 focus:ring-0" 
+              id="password" 
+              name="password"
+              value={signupInfo.password}
+              onChange={handleChange}
+              placeholder="Min. 8 characters" 
+              required 
+              type="password" />
             </div>
             <div className="pt-2">
               <button className="w-full shimmer-btn font-bold py-3.5 rounded-lg text-[14px] text-slate-900 shadow-lg tracking-tight hover:shadow-xl" type="submit">
@@ -93,7 +118,7 @@ function SignUp() {
           <div className="mt-8 text-center">
             <p className="text-slate-500 text-[13px]">
               Already have an account?
-              <a href="#" className="text-blue-400 font-medium hover:text-blue-300 transition-colors ml-1">Sign in</a>
+              <Link to="/login" className="text-blue-400 font-medium hover:text-blue-300 transition-colors ml-1">Sign in</Link>
             </p>
           </div>
         </div>

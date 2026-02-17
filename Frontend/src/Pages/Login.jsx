@@ -2,40 +2,41 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 function Login() {
-    const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
-    const navigate = useNavigate();
+  const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setLoginInfo({ ...loginInfo, [name]: value });
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLoginInfo({ ...loginInfo, [name]: value });
+  };
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:3000/api/auth/login', {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(loginInfo)
-            });
-            const result = await response.json();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginInfo)
+      });
+      const result = await response.json();
 
-            if (response.ok) {
-                // PHASE 10: Store token and user data
-                localStorage.setItem('token', result.token);
-                localStorage.setItem('loggedInUser', result.user.name);
-                
-                alert("Login Success!");
-                navigate('/home');
-            } else {
-                alert(result.message || "Login Failed");
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
+      if (response.ok) {
+        // PHASE 10: Store token and user data
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('loggedInUser', result.user.name);
 
-    return (
+        alert("Login Success!");
+        navigate('/home');
+      } else {
+        alert(result.message || "Login Failed");
+      }
+    } catch (err) {
+      console.error("Login Error:", err);
+      alert("Something went wrong. Check the console.");
+    }
+  };
+
+  return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-[#0F111A]">
       <div className="bg-grain"></div>
       <div className="glow-orb"></div>
@@ -52,22 +53,46 @@ function Login() {
             <h1 className="header-text text-[28px] font-bold text-white mb-2">Sign in to TaxPal</h1>
             <p className="text-slate-400 text-[15px] font-normal leading-relaxed">Manage your freelance finances efficiently.</p>
           </div>
-          <form action="#" className="space-y-5">
+
+
+          <form onSubmit={handleLogin} className="space-y-5">
             <div className="space-y-2">
               <label className="text-[13px] font-medium text-slate-400 ml-1 block" htmlFor="email">Email address</label>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[15px] placeholder-slate-600 focus:ring-0" id="email" placeholder="you@example.com" required="" type="email" />
+              <input
+                className="w-full px-4 py-3 custom-input rounded-lg text-[15px] placeholder-slate-600 focus:ring-0"
+                id="email"
+                name="email"
+                value={loginInfo.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                required
+                type="email"
+              />
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-[13px] font-medium text-slate-400" htmlFor="password">Password</label>
-                <Link to="/#" className="text-[13px] text-blue-400 hover:text-blue-300 transition-colors font-medium">Forgot password?</Link>
+                <Link to="/forgot-password" className="text-[13px] text-blue-400 hover:text-blue-300 transition-colors font-medium">Forgot password?</Link>
               </div>
-              <input className="w-full px-4 py-3 custom-input rounded-lg text-[15px] placeholder-slate-600 focus:ring-0" id="password" placeholder="••••••••" required="" type="password" />
+              <input 
+              className="w-full px-4 py-3 custom-input rounded-lg text-[15px] placeholder-slate-600 focus:ring-0" 
+              id="password" 
+              name="password"
+              value={loginInfo.password}
+              onChange={handleChange}
+              placeholder="••••••••" 
+              required
+              type="password" 
+              />
             </div>
+            
             <button className="w-full bg-white hover:bg-gray-50 text-slate-900 font-bold py-3.5 rounded-lg mt-6 text-[15px] shadow-lg shadow-white/10 transition-all duration-200" type="submit">
               Log In
             </button>
           </form>
+
+
+
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full separator-line"></div>
