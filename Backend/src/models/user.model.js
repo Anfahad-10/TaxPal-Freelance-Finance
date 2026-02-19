@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs")
+const crypto = require("crypto") //Node module for generating tokens
 
 
 const userSchema = new mongoose.Schema({
@@ -21,8 +22,13 @@ const userSchema = new mongoose.Schema({
         minlength:[6, "Password must be at least 6 characters long"],
         maxlength:[30, "Password must be at most 30 characters long"],
         select: false
-    }
-},{
+    },
+
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+},
+
+{
     timestamps:true
 })
 
@@ -41,6 +47,25 @@ userSchema.pre("save", async function () {
 userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password)
 }
+
+
+// This generates a token, hashes it for the DB, but returns the plain token to send in email
+userSchema.methods.getResetPasswordToken = function () {
+  // 1. Generate a random 20-byte token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  // 2. Hash the token (we store the hash, user gets the plain text)
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  // 3. Set expiration (10 minutes)
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
+
 
 
 const UserModel = mongoose.model("user", userSchema)
