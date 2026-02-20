@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FooterCredit from '../Components/FooterCredit';
 
 const LandingPage = () => {
   return (
@@ -214,43 +215,8 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="w-full border-t border-white/5 py-4 text-center">
-          <p className="text-slate-500 text-sm font-medium">
-            Made with <span className="text-red-500 inline-block animate-pulse">💖</span> by :- {' '}  
-            {/* Fahad */}
-            <a 
-              href="https://github.com/Anfahad-10" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-blue-400 transition-colors"
-            >
-              Fahad
-            </a>
-            
-            <span className="mx-2 text-slate-700">|</span>
-            
-            {/* Rashi */}
-            <a 
-              href="https://github.com/rashivishwakarmaa" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-purple-400 transition-colors"
-            >
-              Rashi
-            </a>
-            
-            <span className="mx-2 text-slate-700">|</span>
-            
-            {/* Reshmanjali */}
-            <a 
-              href="https://github.com/Reshmanjali123" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-emerald-400 transition-colors"
-            >
-              Reshmanjali
-            </a>
-          </p>
+        <div className="border-t border-white/5">
+            <FooterCredit />
         </div>
       </footer>
     </div>

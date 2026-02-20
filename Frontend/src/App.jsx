@@ -10,6 +10,7 @@ import LandingPage from './Pages/LandingPage';
 
 import ForgotPassword from './Pages/ForgotPassword';
 import ResetPassword from './Pages/ResetPassword';
+import Dashboard from './Pages/Dashboard'; 
 
 
 
@@ -26,8 +27,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* The :token part is crucial - it acts as a variable */}
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        
-        <Route path="/home" element={<div className="text-white text-center mt-20"><h1>Welcome Home!</h1></div>} />
+
+        <Route path="/dashboard" element={<Dashboard />} />        
       </Routes>
     </div>
   );

@@ -26,7 +26,7 @@ function Login() {
         localStorage.setItem('loggedInUser', result.user.name);
 
         alert("Login Success!");
-        navigate('/home');
+        navigate('/dashboard');
       } else {
         alert(result.message || "Login Failed");
       }

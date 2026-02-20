@@ -77,7 +77,8 @@ async function userLoginController(req, res) {
       email: user.email,
       name: user.name
     },
-    token
+    token: token,
+    success: true
   })
 }
 
@@ -167,11 +168,36 @@ const resetPasswordController = async (req, res) => {
 };
 
 
+/* --- GET CURRENT LOGGED IN USER --- */
+const getUserProfile = async (req, res) => {
+  try {
+    // req.user is provided by our auth middleware
+    const user = await userModel.findById(req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 
 //------------------------------------------------------------------------------------------------------
 module.exports = {
   userRegisterController,
   userLoginController,
   forgotPasswordController,
-  resetPasswordController
+  resetPasswordController,
+  getUserProfile
 }
