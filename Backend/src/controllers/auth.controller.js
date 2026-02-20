@@ -172,7 +172,9 @@ const resetPasswordController = async (req, res) => {
 const getUserProfile = async (req, res) => {
   try {
     // req.user is provided by our auth middleware
-    const user = await userModel.findById(req.user.id);
+    console.log("User from DB:", req.user);
+    const user = await userModel.findById(req.user._id);
+    
     
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
