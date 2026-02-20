@@ -33,7 +33,7 @@ const Dashboard = () => {
                     setUser(result.data); // Set the real user data
                 } else {
                     // If token is expired or invalid, clear storage and kick them out
-                    console.log("BACKEND REJECTED TOKEN. Reason:", result);
+                    console.log("Token:", token);
                     localStorage.removeItem('token');
                     navigate('/login');
                 }
